@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Redirect via Middle Link</title>
+</head>
+<body>
+    <script>
+        // Middle link
+        const middleLink = "https://www.shopstyle.com/action/apiVisitRetailer?url=https%3A%2F%2Fwww.yoox.com%2Fus&pid=uid3024-45917690-22&utm_content=textlink%3Ashopstyle.it%2Fl%3AcjnHH";
+
+        // Function to handle redirection
+        async function redirectToDestination() {
+            try {
+                // Fetch the middle link without following redirects
+                const response = await fetch(middleLink, { redirect: "manual" });
+                
+                // Check if there's a redirection
+                if (response.status === 302 || response.status === 301) {
+                    const destinationUrl = response.headers.get("Location");
+                    
+                    // Redirect user to the destination URL
+                    if (destinationUrl) {
+                        window.location.href = destinationUrl;
+                    } else {
+                        console.error("Failed to retrieve destination URL.");
+                    }
+                } else {
+                    console.error("Middle link did not return a redirect response.");
+                }
+            } catch (error) {
+                console.error("Error during redirection:", error);
+            }
+        }
+
+        // Trigger the redirection process on page load
+        redirectToDestination();
+    </script>
+</body>
+</html>
